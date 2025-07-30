@@ -39,7 +39,7 @@ def translate_text():
         print("Translated text:", translated_text)
         print("Audio file saved at:", file_path)
 
-        # Create URL for the frontend
+     
         audio_url = f"/audio/{audio_file_name}"
 
         return jsonify({
