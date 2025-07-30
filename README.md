@@ -12,3 +12,5 @@ It saves the MP3 temporarily.
 └── README.md
 
 A simple Python Flask API with core HTML that allows users to type any text, select a language from a dropdown, and get both the translated text and an MP3 audio of the translation. Ideal for quick and helpful multilingual conversions.
+
+This project runs locally using file paths on your system. If you host it, make sure to update the file paths accordingly
