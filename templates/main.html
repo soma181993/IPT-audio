@@ -1,1 +1,78 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Translate & Speak</title>
+</head>
+<body>
+  <h2>Translate and Listen</h2>
+  <form id="translateForm">
+    <textarea id="text" rows="4" cols="50" placeholder="Enter your text here..." required></textarea><br><br>
+    
+    <label for="lang">Translate to:</label>
+    <select id="dest_lang">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+      <option value="bn">Bengali</option>
+      <option value="fr">French</option>
+      <option value="es">Spanish</option>
+      <option value="de">German</option>
+    </select><br><br>
+
+    <button type="submit">Translate</button>
+  </form>
+
+  <h3>Translated Text:</h3>
+<div id="translatedText"></div>
+
+<audio id="audioPlayer" controls style="display: none;"></audio>
+
+<audio id="audioPlayer" controls style="display: none;"></audio>
+<button id="playButton" style="display: none;">Play Audio</button>
+  <script>
+  
+
+    document.getElementById('translateForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const inputText = document.getElementById('text').value;
+  const selectedLang = document.getElementById('dest_lang').value;
+
+  fetch('/translate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text: inputText, dest_lang: selectedLang })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Received from API:", data);
+
+    if (data.error) {
+      alert("Server error: " + data.error);
+      return;
+    }
+
+    if (data.translated_text && data.audio_url) {
+      document.getElementById('translatedText').innerText = data.translated_text;
+
+      const audioPlayer = document.getElementById('audioPlayer');
+      audioPlayer.src = data.audio_url;
+      audioPlayer.style.display = 'block';
+
+      const playButton = document.getElementById('playButton');
+      playButton.style.display = 'inline';
+      playButton.onclick = function () {
+        audioPlayer.play();
+      };
+    } else {
+      alert("Unexpected response format.");
+      console.log("Response object:", data);
+    }
+  });
+});
+  </script>
+</body>
+</html>
